@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.alfred.baidusearch</string>
+	<key>connections</key>
+	<dict>
+		<key>13185CAE-1AF0-46FF-89AA-8CEBB949A955</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>8C1EF96D-1CB7-49BA-A1CA-BBD0D2AAFE66</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>EBB780C7-C750-42D0-BBBD-E872BCC5384E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>57E70BE4-32A8-40DE-B5C4-E6375CC76F0C</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Hades</string>
+	<key>description</key>
+	<string>Get Baidu Search Result</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Baidu Search</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>keyword</key>
+				<string>b</string>
+				<key>text</key>
+				<string>Baidu Search</string>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.keyword</string>
+			<key>uid</key>
+			<string>13185CAE-1AF0-46FF-89AA-8CEBB949A955</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>plusspaces</key>
+				<false/>
+				<key>url</key>
+				<string>{query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>8C1EF96D-1CB7-49BA-A1CA-BBD0D2AAFE66</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>plusspaces</key>
+				<false/>
+				<key>url</key>
+				<string>http://www.baidu.com/s?wd={query}</string>
+				<key>utf8</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.openurl</string>
+			<key>uid</key>
+			<string>57E70BE4-32A8-40DE-B5C4-E6375CC76F0C</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>36</integer>
+				<key>keyword</key>
+				<string>bs</string>
+				<key>script</key>
+				<string>#coding:utf-8
+import urllib2
+import urllib
+import alfred
+import sys
+
+reload(sys)
+
+sys.setdefaultencoding('utf-8')
+
+theQuery = u'{query}'
+decodeQuery = theQuery.encode("gbk")
+theQuery = urllib.quote(decodeQuery)
+
+seg_url = 'http://suggestion.baidu.com/su?wd=%s' % theQuery
+
+request = urllib2.urlopen(seg_url)
+
+data = request.read()
+
+result = data.decode('gbk').encode('utf-8') 
+
+index_start = int(result.find('[')) + 1;
+index_end = int(result.rfind(']'));
+
+str_json = result[index_start:index_end]
+array_json = str_json.split(',')
+
+results = []
+
+for q in array_json:
+	arg = q[1:-1]
+	subtitle = "Search Baidu for: %s" % arg
+	item = alfred.Item({'uid': 1, 'arg': arg.encode('utf-8')}, arg.encode('utf-8'), subtitle.encode('utf-8'), ('icon.png', {'type': 'png'}))
+	results.append(item)
+
+xml = alfred.xml(results)
+alfred.write(xml)
+</string>
+				<key>subtext</key>
+				<string>Baidu Search Suggestion</string>
+				<key>title</key>
+				<string>Baidu Search</string>
+				<key>type</key>
+				<integer>3</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>EBB780C7-C750-42D0-BBBD-E872BCC5384E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string></string>
+	<key>uidata</key>
+	<dict>
+		<key>13185CAE-1AF0-46FF-89AA-8CEBB949A955</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>57E70BE4-32A8-40DE-B5C4-E6375CC76F0C</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+		<key>8C1EF96D-1CB7-49BA-A1CA-BBD0D2AAFE66</key>
+		<dict>
+			<key>ypos</key>
+			<real>10</real>
+		</dict>
+		<key>EBB780C7-C750-42D0-BBBD-E872BCC5384E</key>
+		<dict>
+			<key>ypos</key>
+			<real>130</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string></string>
+</dict>
+</plist>
