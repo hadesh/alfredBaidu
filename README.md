@@ -1,6 +1,8 @@
 alfredBaidu
 ===========
 
-type b and bs to start
+type "b " or "bs " to start search by Baidu;
+
+"bs" with suggestions.
 
 Baidu search in alfred workflows
